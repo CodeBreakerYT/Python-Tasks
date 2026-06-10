@@ -1,0 +1,5 @@
+Programming is easy to learn.
+
+Programming supports OOP.
+
+I am studying Programming.
