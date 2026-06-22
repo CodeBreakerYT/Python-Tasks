@@ -86,6 +86,7 @@ def perform_calculation():
     print("3. Multiplication (*)")
     print("4. Division (/)")
     
+    # Concept: Exception Handling
     try:
         op_choice = get_menu_choice("Enter choice (1-4): ", 1, 4)
         num1 = get_float("Enter first number: ")
@@ -94,36 +95,31 @@ def perform_calculation():
         result = None
         op_name = ""
         
-        # Concept: Exception Handling
-        try:
-            match op_choice:
-                case 1:
-                    result = add(num1, num2)
-                    op_name = "Addition"
-                case 2:
-                    result = subtract(num1, num2)
-                    op_name = "Subtraction"
-                case 3:
-                    result = multiply(num1, num2)
-                    op_name = "Multiplication"
-                case 4:
-                    result = divide(num1, num2)
-                    op_name = "Division"
-        except CalculatorError as err:
-            log_error(err.__class__.__name__, err.message)
-            print(f"\nError: {err.message}\n")
-        except Exception as e:
-            log_error(e.__class__.__name__, str(e))
-            print(f"\nSystem Error: {e}\n")
-        else:
-            log_success(op_name, num1, num2, result)
-            print(f"\nSuccess: Result of {op_name} is {result}\n")
-        finally:
-            print("Finished calculation process.")
-            
-    except InvalidInputError as val_err:
-        log_error(val_err.__class__.__name__, val_err.message)
-        print(f"\nInput Validation Error: {val_err.message}\n")
+        match op_choice:
+            case 1:
+                result = add(num1, num2)
+                op_name = "Addition"
+            case 2:
+                result = subtract(num1, num2)
+                op_name = "Subtraction"
+            case 3:
+                result = multiply(num1, num2)
+                op_name = "Multiplication"
+            case 4:
+                result = divide(num1, num2)
+                op_name = "Division"
+                
+    except CalculatorError as err:
+        log_error(err.__class__.__name__, err.message)
+        print(f"\nError: {err.message}\n")
+    except Exception as e:
+        log_error(e.__class__.__name__, str(e))
+        print(f"\nSystem Error: {e}\n")
+    else:
+        log_success(op_name, num1, num2, result)
+        print(f"\nSuccess: Result of {op_name} is {result}\n")
+    finally:
+        print("Finished calculation process.")
 
 def view_history():
     print("\nCalculation History\n")
