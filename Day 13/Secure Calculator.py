@@ -79,13 +79,6 @@ def get_menu_choice(prompt_text, min_val, max_val):
     except ValueError:
         raise InvalidInputError(f"Choice must be a number. Entered: '{choice_str}'")
 
-operations = {
-    1: (add, "Addition"),
-    2: (subtract, "Subtraction"),
-    3: (multiply, "Multiplication"),
-    4: (divide, "Division")
-}
-
 def perform_calculation():
     print("\nSelect Operation\n")
     print("1. Addition (+)")
@@ -98,12 +91,24 @@ def perform_calculation():
         num1 = get_float("Enter first number: ")
         num2 = get_float("Enter second number: ")
         
-        func, op_name = operations[op_choice]
         result = None
+        op_name = ""
         
         # Concept: Exception Handling
         try:
-            result = func(num1, num2)
+            match op_choice:
+                case 1:
+                    result = add(num1, num2)
+                    op_name = "Addition"
+                case 2:
+                    result = subtract(num1, num2)
+                    op_name = "Subtraction"
+                case 3:
+                    result = multiply(num1, num2)
+                    op_name = "Multiplication"
+                case 4:
+                    result = divide(num1, num2)
+                    op_name = "Division"
         except CalculatorError as err:
             log_error(err.__class__.__name__, err.message)
             print(f"\nError: {err.message}\n")
@@ -189,14 +194,6 @@ def exit_calculator():
     sys.exit(0)
 
 # Concept: Menu-Driven Programming
-menu_actions = {
-    1: perform_calculation,
-    2: view_history,
-    3: view_error_report,
-    4: view_statistics,
-    5: exit_calculator
-}
-
 def main():
     init_files()
     while True:
@@ -208,9 +205,17 @@ def main():
         print("5. Exit")
         try:
             choice = get_menu_choice("Enter choice (1-5): ", 1, 5)
-            action = menu_actions.get(choice)
-            if action:
-                action()
+            match choice:
+                case 1:
+                    perform_calculation()
+                case 2:
+                    view_history()
+                case 3:
+                    view_error_report()
+                case 4:
+                    view_statistics()
+                case 5:
+                    exit_calculator()
         except InvalidInputError as e:
             print(f"\nSelection Error: {e.message}\n")
 
