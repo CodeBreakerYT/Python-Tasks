@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 import datetime, os, sys
 
-# Concept: Custom Exceptions
-class CalculatorError(Exception): pass
-class DivisionByZeroError(CalculatorError): pass
-class InvalidInputError(CalculatorError): pass
+# Concept: Exception Handling
 
 # Concept: OOP Basics
 def add(x, y): return x + y
 def sub(x, y): return x - y
 def mul(x, y): return x * y
 def div(x, y):
-    if y == 0: raise DivisionByZeroError()
+    if y == 0: raise ZeroDivisionError("Cannot divide by zero")
     return x / y
 
 HIST = "history.txt"
@@ -32,20 +29,19 @@ def log_err(err, msg):
 # Concept: Input Validation
 def get_num(p):
     val = input(p).strip()
-    if not val: raise InvalidInputError("Empty input")
+    if not val: raise ValueError("Empty input")
     try: return float(val)
-    except ValueError: raise InvalidInputError(f"Invalid number: {val}")
+    except ValueError: raise ValueError(f"Invalid number: {val}")
 
 def get_choice(p, low, high):
     try:
         val = int(input(p).strip())
-        if not (low <= val <= high): raise InvalidInputError("Out of range")
+        if not (low <= val <= high): raise ValueError("Out of range")
         return val
-    except ValueError: raise InvalidInputError("Not an integer")
+    except ValueError: raise ValueError("Not an integer")
 
 def calculate():
     print("\nSelect Operation\n1. Add\n2. Sub\n3. Mul\n4. Div")
-    # Concept: Exception Handling
     try:
         ch = get_choice("Choice (1-4): ", 1, 4)
         x = get_num("First: ")
@@ -55,9 +51,9 @@ def calculate():
             case 2: res, op = sub(x, y), "Sub"
             case 3: res, op = mul(x, y), "Mul"
             case 4: res, op = div(x, y), "Div"
-    except CalculatorError as e:
-        log_err(e.__class__.__name__, e.args[0] if e.args else str(e))
-        print(f"\nError: {e.args[0] if e.args else str(e)}")
+    except (ValueError, ZeroDivisionError) as e:
+        log_err(e.__class__.__name__, str(e))
+        print(f"\nError: {e}")
     except Exception as e:
         log_err(e.__class__.__name__, str(e))
         print(f"\nSystem Error: {e}")
@@ -104,8 +100,8 @@ def main():
                 case 3: view_errors()
                 case 4: view_stats()
                 case 5: sys.exit(0)
-        except InvalidInputError as e:
-            print(f"\nError: {e.args[0]}")
+        except ValueError as e:
+            print(f"\nError: {e}")
 
 if __name__ == "__main__":
     main()
